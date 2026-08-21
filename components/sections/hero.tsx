@@ -97,7 +97,7 @@ export function Hero() {
             </Magnetic>
             <Magnetic>
               <a
-                href="/Advait-Raktate-Resume.pdf"
+                href="/resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-xl border border-border px-7 py-3.5 text-base font-semibold text-foreground transition-colors hover:border-accent hover:text-accent"
