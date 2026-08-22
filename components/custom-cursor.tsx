@@ -4,46 +4,39 @@ import { useEffect, useState } from 'react'
 import { motion, useMotionValue, useSpring } from 'framer-motion'
 import { useFinePointer } from '@/hooks/use-device'
 
+const DOT_SIZE = 11
+
 export function CustomCursor() {
   const fine = useFinePointer()
-  const [hovering, setHovering] = useState(false)
   const [visible, setVisible] = useState(false)
-
   const x = useMotionValue(-100)
   const y = useMotionValue(-100)
-
-  // Trailing ring lags behind, dot is near-instant.
-  const ringX = useSpring(x, { stiffness: 260, damping: 28, mass: 0.6 })
-  const ringY = useSpring(y, { stiffness: 260, damping: 28, mass: 0.6 })
-  const dotX = useSpring(x, { stiffness: 900, damping: 40 })
-  const dotY = useSpring(y, { stiffness: 900, damping: 40 })
+  const dotX = useSpring(x, { stiffness: 900, damping: 38, mass: 0.35 })
+  const dotY = useSpring(y, { stiffness: 900, damping: 38, mass: 0.35 })
+  const trailX = useSpring(x, { stiffness: 180, damping: 22, mass: 0.8 })
+  const trailY = useSpring(y, { stiffness: 180, damping: 22, mass: 0.8 })
+  const echoX = useSpring(x, { stiffness: 90, damping: 18, mass: 1 })
+  const echoY = useSpring(y, { stiffness: 90, damping: 18, mass: 1 })
 
   useEffect(() => {
     if (!fine) return
     document.documentElement.classList.add('custom-cursor-active')
 
-    const move = (e: MouseEvent) => {
-      x.set(e.clientX)
-      y.set(e.clientY)
-      if (!visible) setVisible(true)
-
-      const target = e.target as HTMLElement | null
-      const interactive = target?.closest(
-        'a, button, [role="button"], input, textarea, [data-cursor="hover"]',
-      )
-      setHovering(Boolean(interactive))
+    const move = (event: MouseEvent) => {
+      x.set(event.clientX)
+      y.set(event.clientY)
+      setVisible(true)
     }
-
-    const leave = () => setVisible(false)
+    const hide = () => setVisible(false)
 
     window.addEventListener('mousemove', move)
-    document.addEventListener('mouseleave', leave)
+    document.addEventListener('mouseleave', hide)
     return () => {
       document.documentElement.classList.remove('custom-cursor-active')
       window.removeEventListener('mousemove', move)
-      document.removeEventListener('mouseleave', leave)
+      document.removeEventListener('mouseleave', hide)
     }
-  }, [fine, visible, x, y])
+  }, [fine, x, y])
 
   if (!fine) return null
 
@@ -53,30 +46,34 @@ export function CustomCursor() {
       className="pointer-events-none fixed inset-0 z-[100]"
       style={{ opacity: visible ? 1 : 0, transition: 'opacity 0.2s' }}
     >
-      {/* Outer ring */}
       <motion.div
-        className="fixed left-0 top-0 rounded-full border"
+        className="fixed left-0 top-0 rounded-full"
         style={{
-          x: ringX,
-          y: ringY,
+          x: echoX,
+          y: echoY,
           translateX: '-50%',
           translateY: '-50%',
-          mixBlendMode: 'difference',
+          width: 26,
+          height: 26,
+          backgroundColor: '#2f80ff',
+          opacity: 0.1,
+          filter: 'blur(8px)',
         }}
-        animate={{
-          width: hovering ? 56 : 30,
-          height: hovering ? 56 : 30,
-          backgroundColor: hovering
-            ? 'rgba(79,124,255,0.15)'
-            : 'rgba(79,124,255,0)',
-          borderColor: hovering
-            ? 'rgba(79,124,255,0.9)'
-            : 'rgba(245,245,245,0.5)',
-        }}
-        transition={{ type: 'spring', stiffness: 300, damping: 22 }}
       />
-
-      {/* Inner dot */}
+      <motion.div
+        className="fixed left-0 top-0 rounded-full"
+        style={{
+          x: trailX,
+          y: trailY,
+          translateX: '-50%',
+          translateY: '-50%',
+          width: 18,
+          height: 18,
+          backgroundColor: '#2f80ff',
+          opacity: 0.22,
+          filter: 'blur(4px)',
+        }}
+      />
       <motion.div
         className="fixed left-0 top-0 rounded-full"
         style={{
@@ -84,12 +81,11 @@ export function CustomCursor() {
           y: dotY,
           translateX: '-50%',
           translateY: '-50%',
-          width: 6,
-          height: 6,
-          backgroundColor: 'var(--accent)',
+          width: DOT_SIZE,
+          height: DOT_SIZE,
+          backgroundColor: '#2f80ff',
+          boxShadow: '0 0 14px rgba(47, 128, 255, 0.65)',
         }}
-        animate={{ scale: hovering ? 0 : 1 }}
-        transition={{ type: 'spring', stiffness: 500, damping: 30 }}
       />
     </div>
   )
