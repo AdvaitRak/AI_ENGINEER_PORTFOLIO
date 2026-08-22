@@ -12,9 +12,11 @@ export function CustomCursor() {
   const x = useMotionValue(-100)
   const y = useMotionValue(-100)
 
-  // Trailing ring lags behind, dot is near-instant.
+  // Layered springs create a soft, satisfying “ink in water” feel.
   const ringX = useSpring(x, { stiffness: 260, damping: 28, mass: 0.6 })
   const ringY = useSpring(y, { stiffness: 260, damping: 28, mass: 0.6 })
+  const trailX = useSpring(x, { stiffness: 150, damping: 24, mass: 0.8 })
+  const trailY = useSpring(y, { stiffness: 150, damping: 24, mass: 0.8 })
   const dotX = useSpring(x, { stiffness: 900, damping: 40 })
   const dotY = useSpring(y, { stiffness: 900, damping: 40 })
 
@@ -25,7 +27,7 @@ export function CustomCursor() {
     const move = (e: MouseEvent) => {
       x.set(e.clientX)
       y.set(e.clientY)
-      if (!visible) setVisible(true)
+      setVisible(true)
 
       const target = e.target as HTMLElement | null
       const interactive = target?.closest(
@@ -43,7 +45,7 @@ export function CustomCursor() {
       window.removeEventListener('mousemove', move)
       document.removeEventListener('mouseleave', leave)
     }
-  }, [fine, visible, x, y])
+  }, [fine, x, y])
 
   if (!fine) return null
 
@@ -53,6 +55,24 @@ export function CustomCursor() {
       className="pointer-events-none fixed inset-0 z-[100]"
       style={{ opacity: visible ? 1 : 0, transition: 'opacity 0.2s' }}
     >
+      {/* Soft trailing echo */}
+      <motion.div
+        className="fixed left-0 top-0 rounded-full"
+        style={{
+          x: trailX,
+          y: trailY,
+          translateX: '-50%',
+          translateY: '-50%',
+          width: 18,
+          height: 18,
+          backgroundColor: 'var(--accent)',
+          opacity: 0.16,
+          filter: 'blur(5px)',
+        }}
+        animate={{ scale: hovering ? 2.6 : 1 }}
+        transition={{ type: 'spring', stiffness: 240, damping: 24 }}
+      />
+
       {/* Outer ring */}
       <motion.div
         className="fixed left-0 top-0 rounded-full border"
