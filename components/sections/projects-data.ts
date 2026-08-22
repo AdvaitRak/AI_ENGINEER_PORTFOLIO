@@ -53,7 +53,27 @@ export const projects: Project[] = [
       },
       {
         label: 'Interface',
-        body: 'A Next.js dashboard streams agent logs over WebSockets in real time, giving full visibility into each agent\u2019s decisions as the pipeline runs.',
+        body: 'A Next.js dashboard streams agent logs over WebSockets in real time, giving full visibility into each agent’s decisions as the pipeline runs.',
+      },
+    ],
+  },
+  {
+    id: 'daigno-q',
+    title: 'dAIgno-Q',
+    pitch: 'Hybrid classical-quantum ML pipeline for retinal disease detection',
+    stack: ['PyTorch', 'PennyLane', 'QSVM', 'VQC', 'ResNet50'],
+    detail: [
+      {
+        label: 'Overview',
+        body: 'Built a hybrid classical–quantum ML pipeline for retinal disease detection using ResNet50 feature extraction combined with Quantum Support Vector Machines (QSVMs) and Variational Quantum Circuits (VQCs) on medical imaging datasets.',
+      },
+      {
+        label: 'Method',
+        body: 'Applied transfer learning, robust preprocessing, and PCA-based dimensionality reduction to efficiently embed image features into quantum circuits.',
+      },
+      {
+        label: 'Engineering',
+        body: 'Implemented the full pipeline in PyTorch and PennyLane, delivering an end-to-end quantum-enhanced computer vision system.',
       },
     ],
   },

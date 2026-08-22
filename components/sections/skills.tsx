@@ -55,6 +55,18 @@ const groups: { title: string; items: string[] }[] = [
     ],
   },
   {
+    title: 'Quantum ML',
+    items: [
+      'PennyLane',
+      'Quantum SVM (QSVM)',
+      'Variational Quantum Circuits (VQC)',
+      'Quantum Machine Learning',
+      'Transfer Learning',
+      'PCA/Dimensionality Reduction',
+      'ResNet50',
+    ],
+  },
+  {
     title: 'Cloud',
     items: [
       'AWS',
