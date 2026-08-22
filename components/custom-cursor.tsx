@@ -117,11 +117,11 @@ export function CustomCursor() {
           y: trailY,
           translateX: '-50%',
           translateY: '-50%',
-          width: 18,
-          height: 18,
-          backgroundColor: 'var(--accent)',
-          opacity: morphed ? 0 : 0.14,
-          filter: 'blur(5px)',
+          width: 16,
+          height: 16,
+          backgroundColor: '#2f80ff',
+          opacity: morphed ? 0 : 0.2,
+          filter: 'blur(4px)',
         }}
       />
       <motion.div
@@ -137,8 +137,8 @@ export function CustomCursor() {
           borderWidth,
           borderStyle: 'solid',
           borderColor: morphed ? borderColor : 'transparent',
-          backgroundColor: 'transparent',
-          boxShadow: morphed ? '0 0 18px color-mix(in srgb, var(--accent) 24%, transparent)' : 'none',
+          backgroundColor: morphed ? 'transparent' : '#2f80ff',
+          boxShadow: morphed ? '0 0 18px color-mix(in srgb, var(--accent) 24%, transparent)' : '0 0 10px color-mix(in srgb, #2f80ff 42%, transparent)',
         }}
       />
     </div>
